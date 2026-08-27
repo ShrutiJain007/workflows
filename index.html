@@ -885,8 +885,8 @@ document.getElementById('form-w2').addEventListener('submit', async e => {
   }
 
   // ── Step 2: Poll until success, error, or max attempts ────────────────
-  const pollUrl = N8N_BASE_URL + '/api/v1/executions/' + executionId + '?includeData=true';
-  const pollHeaders = { 'X-N8N-API-KEY': N8N_API_KEY };
+  const pollUrl = N8N_BASE_URL + '/webhook/check-execution?id=' + executionId;
+  const pollHeaders = {};
   let attempt = 0;
 
   // Update poll counter in UI
