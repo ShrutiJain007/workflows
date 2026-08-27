@@ -506,13 +506,13 @@ textarea{min-height:180px;}
 
 <script>
 // ── Webhook URLs ──────────────────────────────────────────────────────────
-const W1_URL = 'https://primary-production-37efc.up.railway.app/webhook/generate-message';
-const W2_URL = 'https://primary-production-37efc.up.railway.app/webhook/outreach-targeting';
+const W1_URL = 'https://n8n-production-241f8.up.railway.app/webhook/generate-message';
+const W2_URL = 'https://n8n-production-241f8.up.railway.app/webhook/outreach-targeting';
 
 // ── n8n Execution API (for async polling) ────────────────────────────────
 // Replace YOUR_N8N_API_KEY with your actual key from n8n → Settings → API
-const N8N_API_KEY  = 'YOUR_N8N_API_KEY';
-const N8N_BASE_URL = 'https://primary-production-37efc.up.railway.app';
+const N8N_API_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5YWM4MWZmNi0wMGNiLTQ0NTctYjc1OC00ZTQwZTNjNTYyNmYiLCJpc3MiOiJuOG4iLCJhdWQiOiJwdWJsaWMtYXBpIiwianRpIjoiNDdlYjFkNTUtZWE0Ny00MGYwLTg3MDEtZThjZmY3NmIzNGQ4IiwiaWF0IjoxNzg3ODE4NTExLCJleHAiOjE3OTAzOTUyMDB9.996A7IpXvUbgOHffJ4V8-klISzlsWAkhi9LRQ-E1LRE';
+const N8N_BASE_URL = 'https://n8n-production-241f8.up.railway.app';
 const POLL_INTERVAL_MS  = 10000;  // poll every 10 seconds
 const POLL_MAX_ATTEMPTS = 90;     // give up after 15 minutes (90 × 10s)
 
