@@ -1,0 +1,1197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>LinkedIn Outreach Writer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#F5F5F3;--surface:#FFF;--border:#E5E4E0;--border-focus:#4F46E5;
+  --text:#111110;--text-2:#6B6B6B;--text-3:#9B9B99;
+  --accent:#4F46E5;--accent-lt:#EEF2FF;
+  --green:#16A34A;--green-lt:#F0FDF4;--green-bd:#BBF7D0;
+  --amber:#D97706;--amber-lt:#FFFBEB;--amber-bd:#FCD34D;--amber-tx:#92400E;
+  --red:#DC2626;--red-lt:#FEF2F2;--red-bd:#FECACA;
+  --blue:#1D4ED8;--blue-lt:#DBEAFE;--blue-bd:#BFDBFE;
+  --r:10px;--r-lg:14px;--r-sm:6px;
+  --sh:0 1px 3px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);
+  --sh-md:0 4px 16px rgba(0,0,0,.08);
+}
+html{font-size:16px;-webkit-font-smoothing:antialiased;}
+body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:0 1rem 5rem;}
+.wrap{max-width:780px;margin:0 auto;}
+
+/* Header */
+.site-header{padding:2.5rem 0 1.75rem;border-bottom:1px solid var(--border);margin-bottom:1.75rem;}
+.eyebrow{font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:.4rem;}
+h1{font-size:1.65rem;font-weight:700;letter-spacing:-.03em;line-height:1.2;margin-bottom:.35rem;}
+.header-sub{font-size:.875rem;color:var(--text-2);line-height:1.6;}
+
+/* Tabs */
+.tab-bar{display:flex;gap:.2rem;border-bottom:1px solid var(--border);margin-bottom:2rem;}
+.tab-btn{padding:.55rem 1rem;font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:600;border:none;background:none;cursor:pointer;color:var(--text-2);border-bottom:2.5px solid transparent;transition:color .15s,border-color .15s;position:relative;z-index:1;}
+.tab-btn:hover{color:var(--text);}
+.tab-btn.active{color:var(--accent);border-bottom-color:var(--accent);}
+.tab-pane{display:none;}
+.tab-pane.active{display:block;}
+
+/* Field groups */
+.field-group{margin-bottom:1.5rem;}
+.field-label{display:block;font-size:.79rem;font-weight:600;letter-spacing:.02em;margin-bottom:.28rem;}
+.field-hint{font-size:.76rem;color:var(--text-3);margin-bottom:.5rem;line-height:1.5;}
+.row-2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+@media(max-width:520px){.row-2{grid-template-columns:1fr;}}
+
+/* Upload zone */
+.upload-zone{border:1.5px dashed var(--border);border-radius:var(--r);padding:1.1rem;background:var(--surface);cursor:pointer;text-align:center;transition:border-color .15s,background .15s;}
+.upload-zone:hover,.upload-zone.drag-over{border-color:var(--accent);background:var(--accent-lt);}
+.upload-zone input{display:none;}
+.uz-icon{width:26px;height:26px;margin:0 auto .45rem;color:var(--text-3);}
+.uz-text{font-size:.8rem;color:var(--text-2);}
+.uz-text strong{color:var(--accent);}
+.uz-text small{display:block;margin-top:.12rem;font-size:.71rem;color:var(--text-3);}
+.file-chip{display:inline-flex;align-items:center;gap:5px;background:var(--accent-lt);color:var(--accent);border:1px solid #C7D2FE;border-radius:20px;padding:3px 10px;font-size:.74rem;font-weight:500;margin-top:.45rem;}
+.file-chip button{background:none;border:none;color:var(--accent);cursor:pointer;opacity:.6;font-size:.82rem;padding:0;}
+.file-chip button:hover{opacity:1;}
+
+/* Inputs */
+textarea,input[type=text],input[type=url]{width:100%;font-family:'DM Sans',sans-serif;font-size:.875rem;color:var(--text);background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);padding:.65rem .875rem;outline:none;resize:vertical;line-height:1.6;transition:border-color .15s,box-shadow .15s;}
+textarea::placeholder,input::placeholder{color:var(--text-3);}
+textarea:focus,input:focus{border-color:var(--border-focus);box-shadow:0 0 0 3px rgba(79,70,229,.1);}
+textarea{min-height:180px;}
+
+/* LinkedIn URL rows */
+.url-rows{display:flex;flex-direction:column;gap:.5rem;margin-bottom:.6rem;}
+.url-row{display:flex;align-items:center;gap:.5rem;}
+.url-row-num{font-size:.75rem;font-weight:600;color:var(--text-3);min-width:18px;}
+.url-row input{flex:1;min-height:unset;resize:none;padding:.5rem .75rem;font-size:.83rem;}
+.url-row-del{background:none;border:none;cursor:pointer;color:var(--text-3);font-size:1rem;padding:0 4px;transition:color .12s;}
+.url-row-del:hover{color:var(--red);}
+.add-row-btn{display:inline-flex;align-items:center;gap:5px;font-size:.79rem;font-weight:500;color:var(--accent);background:none;border:1.5px solid var(--border);border-radius:var(--r-sm);padding:.4rem .8rem;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .12s,border-color .12s;}
+.add-row-btn:hover{background:var(--accent-lt);border-color:#C7D2FE;}
+
+/* Input mode toggle */
+.mode-toggle{display:flex;gap:.4rem;margin-bottom:1rem;}
+.mode-btn{padding:.4rem .85rem;font-family:'DM Sans',sans-serif;font-size:.78rem;font-weight:600;border:1.5px solid var(--border);border-radius:20px;background:var(--surface);color:var(--text-2);cursor:pointer;transition:all .15s;}
+.mode-btn.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+
+/* Divider */
+.divider{border:none;border-top:1px solid var(--border);margin:1.5rem 0;}
+
+/* Buttons */
+.btn-primary{width:100%;background:var(--text);color:#fff;border:none;border-radius:var(--r);padding:.78rem 1.5rem;font-family:'DM Sans',sans-serif;font-size:.9rem;font-weight:600;cursor:pointer;letter-spacing:.01em;transition:background .15s,transform .1s,box-shadow .15s;}
+.btn-primary:hover:not(:disabled){background:#1f2937;transform:translateY(-1px);box-shadow:0 4px 14px rgba(0,0,0,.18);}
+.btn-primary:disabled{opacity:.5;cursor:not-allowed;}
+.btn-secondary{background:var(--surface);color:var(--text-2);border:1.5px solid var(--border);border-radius:var(--r-sm);padding:.45rem .85rem;font-family:'DM Sans',sans-serif;font-size:.79rem;font-weight:500;cursor:pointer;transition:background .12s,border-color .12s;}
+.btn-secondary:hover{background:var(--bg);border-color:#C9C8C3;}
+.btn-linkedin{display:inline-flex;align-items:center;gap:5px;background:var(--surface);color:var(--text-2);border:1.5px solid var(--border);border-radius:var(--r-sm);padding:.45rem .85rem;font-family:'DM Sans',sans-serif;font-size:.78rem;font-weight:600;cursor:pointer;transition:all .12s;}
+.btn-linkedin:hover{background:var(--bg);border-color:#C9C8C3;}
+.btn-email{display:inline-flex;align-items:center;gap:5px;background:var(--blue);color:#fff;border:none;border-radius:var(--r-sm);padding:.45rem .85rem;font-family:'DM Sans',sans-serif;font-size:.78rem;font-weight:600;cursor:pointer;transition:background .12s;}
+.btn-email:hover{background:#1E40AF;}
+
+/* Progress */
+.progress-wrap{display:none;margin:1.1rem 0;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r-lg);padding:1rem 1.25rem;box-shadow:var(--sh);}
+.progress-wrap.visible{display:block;}
+.prog-header{display:flex;align-items:center;gap:7px;margin-bottom:.75rem;}
+.spinner{width:12px;height:12px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.prog-title{font-size:.79rem;font-weight:600;}
+.prog-stages{display:flex;flex-direction:column;gap:.4rem;}
+.stage{display:flex;align-items:center;gap:8px;font-size:.77rem;color:var(--text-3);transition:color .3s;}
+.stage.active{color:var(--text);}
+.stage.done{color:var(--green);}
+.stage-dot{width:6px;height:6px;border-radius:50%;border:1.5px solid var(--border);background:transparent;flex-shrink:0;transition:all .3s;}
+.stage.active .stage-dot{border-color:var(--accent);background:var(--accent);box-shadow:0 0 0 3px rgba(79,70,229,.15);}
+.stage.done .stage-dot{border-color:var(--green);background:var(--green);}
+
+/* Validation */
+.val-box{display:none;background:var(--red-lt);border:1.5px solid var(--red-bd);border-radius:var(--r);padding:.75rem 1rem;margin-bottom:1rem;}
+.val-box.visible{display:block;}
+.val-title{font-size:.79rem;font-weight:600;color:var(--red);margin-bottom:.25rem;}
+.val-list{list-style:none;font-size:.77rem;color:#B91C1C;line-height:1.7;}
+.val-list li::before{content:"→ ";font-weight:600;}
+
+/* ── W1 Output ── */
+.out-section{display:none;}
+.out-section.visible{display:block;}
+.out-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:.875rem;}
+.out-title{font-size:.98rem;font-weight:700;letter-spacing:-.01em;}
+.badge{display:inline-flex;align-items:center;gap:4px;border-radius:20px;padding:3px 9px;font-size:.72rem;font-weight:600;}
+.badge-green{background:var(--green-lt);color:var(--green);border:1px solid var(--green-bd);}
+.badge-amber{background:var(--amber-lt);color:var(--amber-tx);border:1px solid var(--amber-bd);}
+.badge-blue{background:var(--blue-lt);color:var(--blue);border:1px solid var(--blue-bd);}
+.badge-red{background:var(--red-lt);color:var(--red);border:1px solid var(--red-bd);}
+.out-card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r-lg);overflow:hidden;margin-bottom:.875rem;box-shadow:var(--sh);}
+.out-card-hd{display:flex;align-items:center;justify-content:space-between;padding:.55rem 1rem;border-bottom:1px solid var(--border);background:var(--bg);}
+.out-card-lbl{font-size:.68rem;font-weight:700;color:var(--text-3);letter-spacing:.08em;text-transform:uppercase;}
+.copy-btn{font-size:.7rem;font-weight:500;color:var(--text-2);background:none;border:1px solid var(--border);border-radius:var(--r-sm);padding:2px 7px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .12s;}
+.copy-btn:hover{background:var(--bg);color:var(--text);}
+.copy-btn.copied{color:var(--green);border-color:var(--green-bd);}
+.out-card-body{padding:.875rem 1.1rem;}
+.subject-text{font-size:.95rem;font-weight:600;line-height:1.4;}
+.message-text{font-family:'DM Mono',monospace;font-size:.8rem;color:var(--text);line-height:1.9;white-space:pre-wrap;}
+.audit-toggle{font-size:.77rem;font-weight:500;color:var(--text-2);background:none;border:1.5px solid var(--border);border-radius:var(--r-sm);padding:4px 9px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .12s;}
+.audit-toggle:hover,.audit-toggle.open{background:var(--accent-lt);border-color:#C7D2FE;color:var(--accent);}
+.audit-panel{display:none;margin-top:.875rem;}
+.audit-panel.open{display:block;}
+.audit-sec{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);padding:.75rem 1rem;margin-bottom:.5rem;box-shadow:var(--sh);}
+.audit-lbl{font-size:.66rem;font-weight:700;color:var(--text-3);letter-spacing:.09em;text-transform:uppercase;margin-bottom:.35rem;}
+.audit-txt{font-size:.83rem;color:var(--text-2);line-height:1.7;}
+.ctx-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:3px;}
+.ctx-tag{background:var(--accent-lt);color:var(--accent);border:1px solid #C7D2FE;border-radius:20px;padding:2px 9px;font-size:.72rem;font-weight:500;}
+.proof-item{display:flex;gap:6px;font-size:.81rem;color:#166534;line-height:1.6;background:var(--green-lt);border-left:3px solid var(--green);border-radius:0 var(--r-sm) var(--r-sm) 0;padding:.4rem .65rem;margin-bottom:.32rem;}
+.action-row{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.25rem;}
+
+/* Human review */
+.hr-card{background:var(--amber-lt);border:1.5px solid var(--amber-bd);border-radius:var(--r-lg);padding:1.35rem 1.5rem;margin-bottom:.875rem;}
+.hr-title{font-size:.9rem;font-weight:700;color:var(--amber-tx);margin-bottom:.4rem;}
+.hr-desc{font-size:.83rem;color:#78350F;line-height:1.7;margin-bottom:.75rem;}
+.hr-mono{background:#FEF3C7;border-radius:var(--r-sm);padding:.5rem .8rem;font-family:'DM Mono',monospace;font-size:.76rem;color:var(--amber-tx);margin-bottom:.875rem;}
+.hr-sec{font-size:.71rem;font-weight:700;color:var(--amber-tx);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.3rem;}
+.hr-list{list-style:none;font-size:.8rem;color:#78350F;line-height:1.85;margin-bottom:.875rem;}
+.hr-list li::before{content:"• ";font-weight:700;}
+.hr-action{list-style:none;font-size:.8rem;color:#78350F;line-height:1.85;padding-top:.75rem;border-top:1px solid var(--amber-bd);}
+.hr-action li::before{content:"→ ";font-weight:600;}
+
+/* Error */
+.err-section{display:none;}
+.err-section.visible{display:block;}
+.err-card{background:var(--red-lt);border:1.5px solid var(--red-bd);border-radius:var(--r);padding:.85rem 1rem;margin-bottom:.875rem;}
+.err-title{font-size:.82rem;font-weight:700;color:var(--red);margin-bottom:.22rem;}
+.err-body{font-family:'DM Mono',monospace;font-size:.75rem;color:#B91C1C;line-height:1.6;}
+
+/* ══════════════════════════════════════
+   WORKFLOW 2 — Prospect cards
+═══════════════════════════════════════ */
+
+/* Summary stats row */
+.stats-row{display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;margin-bottom:1.25rem;padding:.75rem 1rem;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);box-shadow:var(--sh);}
+.stat-item{display:flex;align-items:baseline;gap:.3rem;}
+.stat-num{font-size:1.25rem;font-weight:700;color:var(--text);line-height:1;}
+.stat-lbl{font-size:.73rem;color:var(--text-2);}
+
+/* Band legend */
+.band-legend{display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;margin-bottom:1.25rem;}
+.band-dot{display:inline-flex;align-items:center;gap:5px;font-size:.73rem;color:var(--text-2);}
+.dot{width:8px;height:8px;border-radius:50%;}
+.dot-prime{background:#16A34A;}
+.dot-strong{background:#2563EB;}
+.dot-moderate{background:#D97706;}
+.dot-weak{background:#9B9B99;}
+.dot-skip{background:#DC2626;}
+
+/* Section header */
+.section-hdr{font-size:.8rem;font-weight:700;color:var(--text);display:flex;align-items:center;gap:.5rem;margin:1.5rem 0 .875rem;}
+
+/* Prospect card */
+.pcard{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r-lg);overflow:hidden;margin-bottom:1rem;box-shadow:var(--sh);}
+.pcard-hd{display:flex;align-items:flex-start;justify-content:space-between;padding:.875rem 1.1rem .6rem;gap:.75rem;}
+.pcard-rank{font-size:.72rem;font-weight:700;color:var(--text-3);min-width:24px;}
+.pcard-score{font-size:2rem;font-weight:700;line-height:1;margin-bottom:.1rem;}
+.score-prime{color:#16A34A;}
+.score-strong{color:#2563EB;}
+.score-moderate{color:#D97706;}
+.score-weak,.score-skip{color:#9B9B99;}
+.score-lbl{font-size:.65rem;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em;}
+.pcard-name{font-size:.95rem;font-weight:700;color:var(--text);margin-bottom:.4rem;}
+.pcard-pills{display:flex;flex-wrap:wrap;gap:.3rem;}
+.pill{display:inline-flex;align-items:center;border-radius:20px;padding:2px 9px;font-size:.7rem;font-weight:600;border:1.5px solid;}
+.pill-prime{background:#F0FDF4;color:#166534;border-color:#86EFAC;}
+.pill-strong{background:#DBEAFE;color:#1E40AF;border-color:#93C5FD;}
+.pill-moderate{background:#FEF3C7;color:#92400E;border-color:#FCD34D;}
+.pill-weak{background:#F3F4F6;color:#6B7280;border-color:#D1D5DB;}
+.pill-skip{background:#FEF2F2;color:#991B1B;border-color:#FCA5A5;}
+.pill-decision{background:#F8FAFC;color:#334155;border-color:#CBD5E1;}
+.pill-insider{background:#ECFDF5;color:#065F46;border-color:#6EE7B7;}
+.pill-agency{background:#EFF6FF;color:#1E40AF;border-color:#BFDBFE;}
+.pill-conf{background:#F9FAFB;color:#6B7280;border-color:#E5E7EB;}
+
+/* Subscore bars */
+.subscores{padding:.65rem 1.1rem .75rem;border-top:1px solid var(--border);}
+.subscore-grid{display:grid;grid-template-columns:1fr 1fr;gap:.45rem 2rem;}
+@media(max-width:480px){.subscore-grid{grid-template-columns:1fr;}}
+.subscore-row{display:flex;align-items:center;gap:.6rem;}
+.subscore-name{font-size:.72rem;color:var(--text-2);min-width:68px;flex-shrink:0;}
+.subscore-bar-wrap{flex:1;height:6px;background:#F3F4F6;border-radius:3px;overflow:hidden;}
+.subscore-bar{height:100%;border-radius:3px;transition:width .4s ease;}
+.bar-prime{background:#16A34A;}
+.bar-strong{background:#2563EB;}
+.bar-moderate{background:#D97706;}
+.bar-weak{background:#9B9B99;}
+.subscore-val{font-size:.72rem;font-weight:600;color:var(--text);min-width:22px;text-align:right;}
+
+/* Rationale + fields */
+.pcard-body{padding:.75rem 1.1rem 0;}
+.rationale{font-size:.835rem;color:var(--text);line-height:1.75;margin-bottom:.875rem;}
+.detail-row{display:grid;grid-template-columns:80px 1fr;gap:.3rem .75rem;margin-bottom:.35rem;align-items:start;}
+.detail-lbl{font-size:.66rem;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:.07em;padding-top:.15rem;}
+.detail-val{font-size:.81rem;color:var(--text-2);line-height:1.6;}
+.hooks-list{list-style:none;}
+.hooks-list li{font-size:.81rem;color:var(--text-2);line-height:1.6;padding:.1rem 0;}
+.hooks-list li::before{content:"· ";color:var(--text-3);}
+.gaps-text{font-size:.79rem;color:var(--amber);line-height:1.6;}
+
+/* Draft section inside card */
+.draft-section{border-top:1px solid var(--border);margin-top:.75rem;padding:.875rem 1.1rem 1rem;}
+.draft-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem;}
+.draft-lbl{font-size:.68rem;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:.08em;}
+.channel-tag{display:inline-flex;align-items:center;gap:4px;font-size:.7rem;font-weight:600;color:var(--text-2);background:var(--bg);border:1px solid var(--border);border-radius:20px;padding:2px 8px;}
+.draft-subject{font-size:.85rem;font-weight:600;color:var(--text);margin-bottom:.4rem;}
+.draft-body{font-family:'DM Mono',monospace;font-size:.79rem;color:var(--text);line-height:1.85;white-space:pre-wrap;}
+.judge-grid{display:flex;flex-wrap:wrap;gap:.3rem;margin-top:.6rem;}
+.judge-chip{font-size:.67rem;color:var(--text-2);background:var(--bg);border:1px solid var(--border);border-radius:var(--r-sm);padding:2px 6px;}
+.router-flags{font-size:.74rem;color:var(--amber);margin-top:.4rem;}
+
+/* Draft button row */
+.pcard-actions{display:flex;align-items:center;gap:.5rem;padding:.75rem 1.1rem;border-top:1px solid var(--border);flex-wrap:wrap;}
+
+/* Failed scrapes */
+.failed-list{list-style:none;font-size:.8rem;color:var(--text-2);line-height:1.8;}
+.failed-list li{padding:.15rem 0;}
+.failed-list li::before{content:"↳ ";color:var(--text-3);}
+
+/* Toast */
+#toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--text);color:#fff;font-size:.79rem;font-weight:500;padding:.5rem .95rem;border-radius:var(--r);opacity:0;transform:translateY(8px);transition:opacity .2s,transform .2s;pointer-events:none;z-index:999;font-family:'DM Sans',sans-serif;}
+#toast.show{opacity:1;transform:translateY(0);}
+
+@media(max-width:600px){h1{font-size:1.3rem;}body{padding:0 .75rem 4rem;}.site-header{padding:1.75rem 0 1.25rem;}.pcard-hd{flex-direction:column;}.subscore-grid{grid-template-columns:1fr;}}
+@media(prefers-reduced-motion:reduce){.spinner{animation:none;}*{transition:none!important;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- Header -->
+<header class="site-header">
+  <p class="eyebrow">Deterministic Outreach Suite</p>
+  <h1>LinkedIn Outreach Writer</h1>
+  <p class="header-sub">Single targeted InMail, or rank and draft outreach for an entire prospect list — both powered by the same deterministic workflow.</p>
+</header>
+
+<!-- Tabs -->
+<div class="tab-bar">
+  <button type="button" class="tab-btn active" onclick="switchTab('w1',this)">Single Outreach</button>
+  <button type="button" class="tab-btn" onclick="switchTab('w2',this)">Prospect Ranking &amp; Writer</button>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     WORKFLOW 1 — Single outreach
+════════════════════════════════════════════ -->
+<div id="tab-w1" class="tab-pane active">
+  <form id="form-w1" novalidate>
+    <div class="field-group">
+      <label class="field-label">Résumé</label>
+      <p class="field-hint">PDF — achievements and metrics extracted automatically.</p>
+      <div class="upload-zone" id="uz1">
+        <input type="file" id="resume1" accept=".pdf"/>
+        <svg class="uz-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m6.75 12-3-3m0 0-3 3m3-3v6m-1.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"/></svg>
+        <p class="uz-text"><strong onclick="document.getElementById('resume1').click()">Click to upload</strong> or drag and drop<small>PDF · max 10 MB</small></p>
+      </div>
+      <div id="chip1"></div>
+    </div>
+    <div class="field-group">
+      <label class="field-label" for="jd1">Job Description</label>
+      <p class="field-hint">Paste the full posting — requirements and context both matter.</p>
+      <textarea id="jd1" placeholder="Paste the complete job description here…"></textarea>
+    </div>
+    <div class="field-group">
+      <label class="field-label" for="li1">Prospect LinkedIn URL <span style="font-size:.72rem;font-weight:400;color:var(--text-3);margin-left:4px">optional</span></label>
+      <p class="field-hint">The recruiter or hiring manager you're reaching out to. If provided, their profile is scraped and used to personalise the message.</p>
+      <input type="url" id="li1" placeholder="https://www.linkedin.com/in/… (leave blank to skip)"/>
+    </div>
+    <div class="field-group">
+      <label class="field-label" for="prior1">Prior Conversation <span style="font-size:.72rem;font-weight:400;color:var(--text-3);margin-left:4px">optional</span></label>
+      <p class="field-hint">Paste any previous email thread or LinkedIn exchange. The workflow uses this to continue the conversation naturally.</p>
+      <textarea id="prior1" style="min-height:100px" placeholder="Paste a prior message thread here if you have one…"></textarea>
+    </div>
+    <div class="val-box" id="val1"><p class="val-title">Please fix the following:</p><ul class="val-list" id="val1-list"></ul></div>
+    <hr class="divider"/>
+    <button type="submit" class="btn-primary" id="btn1">Generate Outreach Message</button>
+  </form>
+
+  <div class="progress-wrap" id="prog1">
+    <div class="prog-header"><div class="spinner"></div><span class="prog-title">Generating your message…</span></div>
+    <div class="prog-stages" id="stages1">
+      <div class="stage"><div class="stage-dot"></div><span>Extracting résumé text and achievements</span></div>
+      <div class="stage"><div class="stage-dot"></div><span>Scraping prospect LinkedIn profile</span></div>
+      <div class="stage"><div class="stage-dot"></div><span>Parsing JD requirements and inferring pain points</span></div>
+      <div class="stage"><div class="stage-dot"></div><span>Matching résumé evidence to role requirements</span></div>
+      <div class="stage"><div class="stage-dot"></div><span>Writing executive InMail draft</span></div>
+      <div class="stage"><div class="stage-dot"></div><span>Humanising and finalising message</span></div>
+    </div>
+  </div>
+
+  <div class="err-section" id="err1">
+    <div class="err-card"><p class="err-title" id="err1-title"></p><p class="err-body" id="err1-body"></p></div>
+    <button class="btn-secondary" onclick="resetW1()">← Try again</button>
+  </div>
+
+  <div class="out-section" id="hr1">
+    <div class="hr-card">
+      <p class="hr-title">⚠️ Sent for Human Review</p>
+      <p class="hr-desc">Your résumé and the job description did not have enough matching evidence to generate a message automatically.</p>
+      <div class="hr-mono" id="hr1-reason">Similarity below automatic approval threshold (0.7).</div>
+      <p class="hr-sec">What this means</p>
+      <ul class="hr-list">
+        <li>No résumé–JD match scored above the 0.7 cosine similarity threshold</li>
+        <li>This usually means the résumé and JD are in different industries or domains</li>
+      </ul>
+      <p class="hr-sec">What you can do</p>
+      <ul class="hr-action">
+        <li>Try a job description closer to your professional background</li>
+        <li>Ensure your résumé highlights specific, measurable achievements</li>
+        <li>Make sure the PDF is text-based, not a scanned image</li>
+      </ul>
+    </div>
+    <button class="btn-secondary" onclick="resetW1()">← Try again</button>
+  </div>
+
+  <div class="out-section" id="out1">
+    <div class="out-header">
+      <span class="out-title">Generated Outreach</span>
+      <span class="badge badge-green">✓ Ready to send</span>
+    </div>
+    <div class="out-card" id="subj1-card">
+      <div class="out-card-hd"><span class="out-card-lbl">Subject Line</span><button class="copy-btn" onclick="copyEl('subj1-body',this)">Copy</button></div>
+      <div class="out-card-body"><p class="subject-text" id="subj1-body"></p></div>
+    </div>
+    <div class="out-card">
+      <div class="out-card-hd"><span class="out-card-lbl">Message</span><button class="copy-btn" onclick="copyEl('msg1-body',this)">Copy</button></div>
+      <div class="out-card-body"><p class="message-text" id="msg1-body"></p></div>
+    </div>
+    <div class="action-row">
+      <button class="audit-toggle" id="a1-toggle" onclick="toggleAudit('a1-panel','a1-toggle')">🔍 Show Audit Trail</button>
+      <button class="btn-secondary" onclick="resetW1()">🔄 Generate Again</button>
+    </div>
+    <div class="audit-panel" id="a1-panel">
+      <div style="margin:.875rem 0 .55rem"><span style="font-size:.83rem;font-weight:700">Audit Trail</span><span style="font-size:.72rem;color:var(--text-3);margin-left:7px">How the message was constructed</span></div>
+      <div class="audit-sec" id="a1-hook-w"><p class="audit-lbl">Hook Used</p><p class="audit-txt" id="a1-hook"></p></div>
+      <div class="audit-sec" id="a1-pain-w"><p class="audit-lbl">Inferred Pain (from JD)</p><p class="audit-txt" id="a1-pain"></p></div>
+      <div class="audit-sec" id="a1-ctx-w"><p class="audit-lbl">LinkedIn Context Used</p><div class="ctx-tags" id="a1-ctx"></div></div>
+      <div class="audit-sec" id="a1-proof-w"><p class="audit-lbl">Résumé Evidence Used</p><div id="a1-proof"></div></div>
+    </div>
+  </div>
+</div><!-- /tab-w1 -->
+
+
+<!-- ═══════════════════════════════════════════
+     WORKFLOW 2 — Prospect Ranking + Writer
+════════════════════════════════════════════ -->
+<div id="tab-w2" class="tab-pane">
+  <form id="form-w2" novalidate>
+
+    <!-- Résumé -->
+    <div class="field-group">
+      <label class="field-label">Résumé</label>
+      <p class="field-hint">PDF — proof points are extracted and mapped to each prospect.</p>
+      <div class="upload-zone" id="uz2">
+        <input type="file" id="resume2" accept=".pdf"/>
+        <svg class="uz-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m6.75 12-3-3m0 0-3 3m3-3v6m-1.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"/></svg>
+        <p class="uz-text"><strong onclick="document.getElementById('resume2').click()">Click to upload</strong> or drag and drop<small>PDF · max 10 MB</small></p>
+      </div>
+      <div id="chip2"></div>
+    </div>
+
+    <!-- JD + Company -->
+    <div class="row-2">
+      <div class="field-group">
+        <label class="field-label" for="jd2">Job Description</label>
+        <p class="field-hint">The role you are applying for.</p>
+        <textarea id="jd2" style="min-height:130px" placeholder="Paste the job description here…"></textarea>
+      </div>
+      <div class="field-group">
+        <label class="field-label" for="co2">Company Name</label>
+        <p class="field-hint">The hiring company.</p>
+        <input type="text" id="co2" placeholder="e.g. Acme Corp" style="height:52px;resize:none;min-height:unset;"/>
+      </div>
+    </div>
+
+    <!-- Prospect input: CSV or manual URLs -->
+    <div class="field-group">
+      <label class="field-label">Prospects</label>
+      <p class="field-hint">Upload a CSV of LinkedIn URLs, or add them manually one per row.</p>
+      <div class="mode-toggle">
+        <button type="button" class="mode-btn active" id="mode-csv-btn" onclick="setMode('csv')">Upload CSV</button>
+        <button type="button" class="mode-btn" id="mode-url-btn" onclick="setMode('url')">Add URLs manually</button>
+      </div>
+
+      <!-- CSV mode -->
+      <div id="mode-csv">
+        <div class="upload-zone" id="uz3">
+          <input type="file" id="csv2" accept=".csv,text/csv"/>
+          <svg class="uz-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3.375 19.5h17.25m-17.25 0a1.125 1.125 0 0 1-1.125-1.125M3.375 19.5h7.5c.621 0 1.125-.504 1.125-1.125m-9.75 0V5.625m0 12.75v-1.5c0-.621.504-1.125 1.125-1.125m18.375 2.625V5.625m0 12.75c0 .621-.504 1.125-1.125 1.125m1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125m0 3.75h-7.5A1.125 1.125 0 0 1 12 18.375m9.75-12.75c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125m19.5 0v1.5c0 .621-.504 1.125-1.125 1.125M2.25 5.625v1.5c0 .621.504 1.125 1.125 1.125m0 0h17.25m-17.25 0c0 .621.504 1.125 1.125 1.125h2.25"/></svg>
+          <p class="uz-text"><strong onclick="document.getElementById('csv2').click()">Click to upload</strong> or drag and drop<small>CSV with LinkedIn URLs</small></p>
+        </div>
+        <div id="chip3"></div>
+      </div>
+
+      <!-- Manual URL mode -->
+      <div id="mode-url" style="display:none">
+        <div class="url-rows" id="url-rows"></div>
+        <button type="button" class="add-row-btn" onclick="addUrlRow()">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Add row
+        </button>
+      </div>
+    </div>
+
+    <div class="val-box" id="val2"><p class="val-title">Please fix the following:</p><ul class="val-list" id="val2-list"></ul></div>
+    <hr class="divider"/>
+    <button type="submit" class="btn-primary" id="btn2">Rank Prospects &amp; Generate Drafts</button>
+  </form>
+
+  <div class="progress-wrap" id="prog2">
+    <div class="prog-header"><div class="spinner"></div><span class="prog-title">Processing prospects…</span></div>
+    <div class="prog-stages" id="stages2">
+      <div class="stage"><div class="stage-dot"></div><span>Extracting résumé proof points</span></div>
+      <div class="stage"><div class="stage-dot"></div><span>Scraping LinkedIn profiles</span></div>
+      <div class="stage"><div class="stage-dot"></div><span>Analysing &amp; scoring each prospect (Stage 0 + Stage 1)</span></div>
+      <div class="stage"><div class="stage-dot"></div><span>Ranking &amp; selecting top prospects per bucket</span></div>
+      <div class="stage"><div class="stage-dot"></div><span>Writing &amp; linting outreach drafts</span></div>
+      <div class="stage"><div class="stage-dot"></div><span>Judge review &amp; routing</span></div>
+    </div>
+    <p id="poll-status" style="display:none;font-size:.78rem;color:var(--text-3);margin-top:.75rem;font-family:'DM Mono',monospace"></p>
+  </div>
+
+  <div class="err-section" id="err2">
+    <div class="err-card"><p class="err-title" id="err2-title"></p><p class="err-body" id="err2-body"></p></div>
+    <button class="btn-secondary" onclick="resetW2()">← Try again</button>
+  </div>
+
+  <!-- W2 Results -->
+  <div class="out-section" id="out2">
+    <div class="out-header">
+      <span class="out-title">Results</span>
+      <button class="btn-secondary" onclick="resetW2()">🔄 Run Again</button>
+    </div>
+
+    <!-- Stats row -->
+    <div class="stats-row" id="w2-stats"></div>
+
+    <!-- Band legend -->
+    <div class="band-legend">
+      <span class="band-dot"><span class="dot dot-prime"></span>Prime</span>
+      <span class="band-dot"><span class="dot dot-strong"></span>Strong</span>
+      <span class="band-dot"><span class="dot dot-moderate"></span>Moderate</span>
+      <span class="band-dot"><span class="dot dot-weak"></span>Weak</span>
+      <span class="band-dot"><span class="dot dot-skip"></span>Skip</span>
+    </div>
+
+    <!-- Approved -->
+    <div id="w2-approved-wrap">
+      <div class="section-hdr"><span class="badge badge-green">✓ Approved</span><span id="w2-approved-count" style="font-size:.8rem;color:var(--text-2);font-weight:400"></span></div>
+      <div id="w2-approved"></div>
+    </div>
+
+    <!-- Human review -->
+    <div id="w2-review-wrap">
+      <div class="section-hdr"><span class="badge badge-amber">⚠ Human Review</span><span id="w2-review-count" style="font-size:.8rem;color:var(--text-2);font-weight:400"></span></div>
+      <div id="w2-review"></div>
+    </div>
+
+    <!-- Failed -->
+    <div id="w2-failed-wrap" style="display:none">
+      <div class="section-hdr"><span class="badge badge-red">✕ Failed Scrapes</span></div>
+      <ul class="failed-list" id="w2-failed"></ul>
+    </div>
+  </div>
+</div><!-- /tab-w2 -->
+
+</div><!-- /wrap -->
+<div id="toast"></div>
+
+<script>
+// ── Webhook URLs ──────────────────────────────────────────────────────────
+const W1_URL = 'https://primary-production-37efc.up.railway.app/webhook/generate-message';
+const W2_URL = 'https://primary-production-37efc.up.railway.app/webhook/outreach-targeting';
+
+// ── n8n Execution API (for async polling) ────────────────────────────────
+// Replace YOUR_N8N_API_KEY with your actual key from n8n → Settings → API
+const N8N_API_KEY  = 'YOUR_N8N_API_KEY';
+const N8N_BASE_URL = 'https://primary-production-37efc.up.railway.app';
+const POLL_INTERVAL_MS  = 10000;  // poll every 10 seconds
+const POLL_MAX_ATTEMPTS = 90;     // give up after 15 minutes (90 × 10s)
+
+// =========================================================================
+// ALL GLOBAL FUNCTIONS
+// Every function referenced by an onclick attribute MUST live here — outside
+// DOMContentLoaded — so the browser can find it when the user clicks.
+// =========================================================================
+
+// ── Tab switching ─────────────────────────────────────────────────────────
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ── Utility ───────────────────────────────────────────────────────────────
+function esc(str) {
+  return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function toast(msg) {
+  const t = document.getElementById('toast');
+  if (!t) return;
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2400);
+}
+function copyEl(elId, btn) {
+  const el = document.getElementById(elId);
+  const text = el ? (el.innerText || el.textContent) : '';
+  navigator.clipboard.writeText(text).then(() => {
+    const orig = btn.textContent; btn.textContent = 'Copied!'; btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = orig; btn.classList.remove('copied'); }, 1800);
+  }).catch(() => toast('Could not copy — try selecting and copying manually.'));
+}
+function toggleAudit(panelId, toggleId) {
+  const panel = document.getElementById(panelId);
+  const toggle = document.getElementById(toggleId);
+  const open = panel.classList.toggle('open');
+  toggle.classList.toggle('open', open);
+  toggle.textContent = open ? '🔍 Hide Audit Trail' : '🔍 Show Audit Trail';
+}
+function closeAudit(panelId, toggleId) {
+  document.getElementById(panelId).classList.remove('open');
+  const t = document.getElementById(toggleId);
+  t.classList.remove('open');
+  t.textContent = '🔍 Show Audit Trail';
+}
+
+// ── File state (global so all file functions can share it) ─────────────────
+const files = { resume1: null, resume2: null, csv2: null };
+
+// ── File upload helpers ────────────────────────────────────────────────────
+// clearFile is called from onclick attributes in dynamically-rendered chip HTML
+// so it MUST be global.
+function clearFile(key, chipId, inputId) {
+  files[key] = null;
+  const chip = document.getElementById(chipId);
+  if (chip) chip.innerHTML = '';
+  const inp = document.getElementById(inputId);
+  if (inp) inp.value = '';
+}
+
+// handleFile is called from setupUpload (inside DCL) and also from the drop
+// listener. inputId is passed in explicitly so clearFile onclick has it.
+function handleFile(file, key, chipEl, accept, inputId) {
+  if (!file) return;
+  if (accept === 'pdf' && file.type !== 'application/pdf') { toast('Only PDF files accepted.'); return; }
+  if (accept === 'csv' && !file.name.toLowerCase().endsWith('.csv')) { toast('Only CSV files accepted.'); return; }
+  files[key] = file;
+  chipEl.innerHTML = `<div class="file-chip">
+    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+      <polyline points="14 2 14 8 20 8"/>
+    </svg>
+    ${esc(file.name)} · ${(file.size / 1024).toFixed(1)} KB
+    <button type="button" onclick="event.stopPropagation();clearFile('${key}','${chipEl.id}','${inputId}')">✕</button>
+  </div>`;
+}
+
+// ── Input mode toggle (W2: CSV vs manual URLs) ─────────────────────────────
+// MUST be global — called from onclick="setMode(...)"
+let inputMode = 'csv';
+function setMode(mode) {
+  inputMode = mode;
+  document.getElementById('mode-csv').style.display = mode === 'csv' ? '' : 'none';
+  document.getElementById('mode-url').style.display = mode === 'url' ? '' : 'none';
+  document.getElementById('mode-csv-btn').classList.toggle('active', mode === 'csv');
+  document.getElementById('mode-url-btn').classList.toggle('active', mode === 'url');
+}
+
+// ── Manual URL rows ────────────────────────────────────────────────────────
+// MUST be global — addUrlRow called from onclick="addUrlRow()"
+//                  removeUrlRow called from onclick inside dynamically-created rows
+let urlRowCount = 0;
+function addUrlRow(value) {
+  urlRowCount++;
+  const id = 'url-row-' + urlRowCount;
+  const n = urlRowCount;
+  const row = document.createElement('div');
+  row.className = 'url-row'; row.id = id;
+  row.innerHTML = `
+    <span class="url-row-num">${n}</span>
+    <input type="url" placeholder="https://www.linkedin.com/in/…" value="${esc(value || '')}"/>
+    <button type="button" class="url-row-del" onclick="removeUrlRow('${id}')" title="Remove">✕</button>`;
+  const container = document.getElementById('url-rows');
+  if (container) container.appendChild(row);
+}
+function removeUrlRow(id) {
+  const el = document.getElementById(id);
+  if (el) el.remove();
+  document.querySelectorAll('.url-row').forEach((r, i) => {
+    r.querySelector('.url-row-num').textContent = i + 1;
+  });
+}
+function getManualUrls() {
+  return Array.from(document.querySelectorAll('.url-row input'))
+    .map(i => i.value.trim()).filter(Boolean);
+}
+
+// ── W1 reset / hide ────────────────────────────────────────────────────────
+function hideW1() {
+  ['out1', 'hr1', 'err1'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.classList.remove('visible');
+  });
+  const v = document.getElementById('val1');
+  if (v) v.classList.remove('visible');
+}
+function resetW1() {
+  hideW1();
+  closeAudit('a1-panel', 'a1-toggle');
+  const f = document.getElementById('form-w1');
+  if (f) f.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ── W2 reset / hide ────────────────────────────────────────────────────────
+function hideW2() {
+  ['out2', 'err2'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.classList.remove('visible');
+  });
+  const v = document.getElementById('val2');
+  if (v) v.classList.remove('visible');
+}
+function resetW2() {
+  hideW2();
+  const f = document.getElementById('form-w2');
+  if (f) f.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// =========================================================================
+// DOM-DEPENDENT CODE — runs only after full parse
+// Only event listeners and initialisation go here.
+// NO function definitions that are referenced by onclick attributes.
+// =========================================================================
+document.addEventListener('DOMContentLoaded', function () {
+
+// ── Initialise 2 manual URL rows ──────────────────────────────────────────
+addUrlRow(); addUrlRow();
+
+// ── Upload zone wiring ────────────────────────────────────────────────────
+function setupUpload(inputId, zoneId, chipId, key, accept) {
+  const inp  = document.getElementById(inputId);
+  const zone = document.getElementById(zoneId);
+  const chip = document.getElementById(chipId);
+  if (!inp || !zone || !chip) return;
+
+  inp.addEventListener('change', e => {
+    if (e.target.files[0]) handleFile(e.target.files[0], key, chip, accept, inputId);
+  });
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
+  zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+  zone.addEventListener('drop', e => {
+    e.preventDefault(); zone.classList.remove('drag-over');
+    if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0], key, chip, accept, inputId);
+  });
+  // Click-to-open: only trigger if the click is NOT on the chip's ✕ button
+  // (✕ uses stopPropagation so this never fires for it)
+  zone.addEventListener('click', e => {
+    const tag = e.target.tagName;
+    if (tag !== 'STRONG' && tag !== 'BUTTON') inp.click();
+  });
+}
+setupUpload('resume1', 'uz1', 'chip1', 'resume1', 'pdf');
+setupUpload('resume2', 'uz2', 'chip2', 'resume2', 'pdf');
+setupUpload('csv2',    'uz3', 'chip3', 'csv2',    'csv');
+
+// ── Progress ──────────────────────────────────────────────────────────────
+const D1 = [0, 4000, 10000, 18000, 28000, 38000];
+const D2 = [0, 5000, 16000, 36000, 58000, 85000];
+function startProgress(wrapId, stageId, delays) {
+  const wrap = document.getElementById(wrapId);
+  if (wrap) wrap.classList.add('visible');
+  const stages = document.querySelectorAll('#' + stageId + ' .stage');
+  stages.forEach(s => s.classList.remove('active', 'done'));
+  delays.forEach((d, i) => setTimeout(() => {
+    stages.forEach((s, si) => {
+      if (si < i)  { s.classList.remove('active'); s.classList.add('done'); }
+      if (si === i){ s.classList.remove('done');   s.classList.add('active'); }
+    });
+  }, d));
+}
+function stopProgress(wrapId, stageId) {
+  document.querySelectorAll('#' + stageId + ' .stage').forEach(s => {
+    s.classList.remove('active'); s.classList.add('done');
+  });
+  setTimeout(() => {
+    const wrap = document.getElementById(wrapId);
+    if (wrap) wrap.classList.remove('visible');
+  }, 400);
+}
+
+// ── Validation / error helpers ────────────────────────────────────────────
+function showVal(boxId, listId, errs) {
+  document.getElementById(listId).innerHTML = errs.map(e => `<li>${e}</li>`).join('');
+  document.getElementById(boxId).classList.add('visible');
+}
+function showErr(secId, titleId, bodyId, title, body) {
+  document.getElementById(titleId).textContent = title;
+  document.getElementById(bodyId).textContent  = body;
+  document.getElementById(secId).classList.add('visible');
+  document.getElementById(secId).scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ── Audit helpers ─────────────────────────────────────────────────────────
+function setAuditText(elId, wrapId, text) {
+  document.getElementById(elId).textContent = text;
+  document.getElementById(wrapId).style.display = text ? '' : 'none';
+}
+function setAuditTags(elId, wrapId, items) {
+  document.getElementById(elId).innerHTML = items.map(c => `<span class="ctx-tag">${esc(c)}</span>`).join('');
+  document.getElementById(wrapId).style.display = items.length ? '' : 'none';
+}
+function setAuditProof(elId, wrapId, items) {
+  document.getElementById(elId).innerHTML = items.map(p =>
+    `<div class="proof-item"><span style="color:var(--green);font-weight:700;flex-shrink:0">✓</span><span>${esc(p)}</span></div>`
+  ).join('');
+  document.getElementById(wrapId).style.display = items.length ? '' : 'none';
+}
+
+// ── W1 render ─────────────────────────────────────────────────────────────
+function renderW1(subj, msg, audit) {
+  const sc = document.getElementById('subj1-card');
+  if (subj) {
+    document.getElementById('subj1-body').textContent = subj;
+    sc.style.display = '';
+  } else {
+    sc.style.display = 'none';
+  }
+  document.getElementById('msg1-body').textContent = msg;
+  setAuditText('a1-hook',  'a1-hook-w',  audit.hook_used || '');
+  setAuditText('a1-pain',  'a1-pain-w',  audit.inferred_pain_used || '');
+  setAuditTags('a1-ctx',   'a1-ctx-w',   audit.business_context_used || []);
+  setAuditProof('a1-proof','a1-proof-w', audit.proof_used || []);
+  document.getElementById('out1').classList.add('visible');
+  document.getElementById('out1').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+function showHR1(reason) {
+  document.getElementById('hr1-reason').textContent = reason;
+  document.getElementById('hr1').classList.add('visible');
+  document.getElementById('hr1').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ── W1 form submit ────────────────────────────────────────────────────────
+document.getElementById('form-w1').addEventListener('submit', async e => {
+  e.preventDefault();
+  hideW1();
+  const errs = [];
+  if (!files.resume1)                               errs.push('Upload your résumé (PDF).');
+  if (!document.getElementById('jd1').value.trim()) errs.push('Paste the job description.');
+  if (errs.length) { showVal('val1', 'val1-list', errs); return; }
+  const btn = document.getElementById('btn1');
+  btn.disabled = true; btn.textContent = 'Generating…';
+  startProgress('prog1', 'stages1', D1);
+    try {
+      const fd = new FormData();
+      fd.append('resume', files.resume1, files.resume1.name);
+      fd.append('job_description', document.getElementById('jd1').value.trim());
+      fd.append('prospect_linkedin_url', document.getElementById('li1').value.trim());
+      fd.append('prior_conversation', document.getElementById('prior1').value.trim());
+      const res = await fetch(W1_URL, { method: 'POST', body: fd });
+    stopProgress('prog1', 'stages1');
+    if (res.status === 500) {
+      let reason = 'Similarity below automatic approval threshold (0.7).';
+      try {
+        const j = await res.json();
+        if (j.message && !j.message.includes('No item to return')) {
+          showErr('err1', 'err1-title', 'err1-body', 'Backend error (500)', j.message || res.statusText); return;
+        }
+      } catch (_) {
+        showErr('err1', 'err1-title', 'err1-body', 'Backend error (500)', res.statusText); return;
+      }
+      showHR1(reason); return;
+    }
+    if (!res.ok) {
+      showErr('err1', 'err1-title', 'err1-body', 'Request failed — ' + res.status, (await res.text()).slice(0, 400)); return;
+    }
+    let raw = await res.json();
+    // n8n can return: array of items, single object, or object with .output wrapper
+    if (Array.isArray(raw)) raw = raw.find(x => x && (x.status || x.subject || x.message || x.output)) || raw[0];
+    if (raw && raw.json) raw = raw.json;
+    if (raw && raw.output) raw = raw.output;
+    if (!raw) { showErr('err1', 'err1-title', 'err1-body', 'Empty response', 'The backend returned no data.'); return; }
+    if (raw.status === 'HUMAN_REVIEW') { showHR1(raw.reason || 'Similarity below automatic approval threshold (0.7).'); return; }
+    const subj = (raw.subject || '').trim();
+    const msg  = (raw.message || '').trim();
+    const audit = raw.audit || {};
+    if (!msg) { showErr('err1', 'err1-title', 'err1-body', 'Empty response', 'The backend returned no message.'); return; }
+    renderW1(subj, msg, audit);
+  } catch (err) {
+    stopProgress('prog1', 'stages1');
+    showErr('err1', 'err1-title', 'err1-body', 'Connection error', err.message);
+  } finally {
+    btn.disabled = false; btn.textContent = 'Generate Outreach Message';
+  }
+});
+
+// ── W2 form submit — async polling ────────────────────────────────────────
+// 1. POST inputs → get executionId instantly (webhook responds immediately)
+// 2. Poll /api/v1/executions/{id} every 10s until status === 'success'
+// 3. Extract output from Aggregate Final Output node → render
+document.getElementById('form-w2').addEventListener('submit', async e => {
+  e.preventDefault();
+  hideW2();
+  const errs = [];
+  if (!files.resume2)                                      errs.push('Upload your résumé (PDF).');
+  if (!document.getElementById('jd2').value.trim())        errs.push('Paste the job description.');
+  if (!document.getElementById('co2').value.trim())        errs.push('Enter the company name.');
+  if (inputMode === 'csv' && !files.csv2)                  errs.push('Upload the prospect list (CSV).');
+  if (inputMode === 'url' && getManualUrls().length === 0) errs.push('Add at least one LinkedIn URL.');
+  if (errs.length) { showVal('val2', 'val2-list', errs); return; }
+
+  const btn = document.getElementById('btn2');
+  btn.disabled = true; btn.textContent = 'Processing…';
+  startProgress('prog2', 'stages2', D2);
+
+  // ── Step 1: POST inputs, get executionId back immediately ──────────────
+  let executionId;
+  try {
+    const fd = new FormData();
+    fd.append('resume', files.resume2, files.resume2.name);
+    fd.append('jd', document.getElementById('jd2').value.trim());
+    fd.append('company', document.getElementById('co2').value.trim());
+    if (inputMode === 'csv') {
+      fd.append('csv', files.csv2, files.csv2.name);
+    } else {
+      fd.append('linkedin_urls', JSON.stringify(getManualUrls()));
+    }
+    const res = await fetch(W2_URL, { method: 'POST', body: fd });
+    if (!res.ok) {
+      stopProgress('prog2', 'stages2');
+      showErr('err2', 'err2-title', 'err2-body', 'Request failed — ' + res.status, (await res.text()).slice(0, 400));
+      btn.disabled = false; btn.textContent = 'Rank Prospects & Generate Drafts';
+      return;
+    }
+    const init = await res.json();
+    executionId = init.executionId || (Array.isArray(init) ? init[0].executionId : null);
+    if (!executionId) {
+      stopProgress('prog2', 'stages2');
+      showErr('err2', 'err2-title', 'err2-body', 'No execution ID returned', JSON.stringify(init).slice(0, 200));
+      btn.disabled = false; btn.textContent = 'Rank Prospects & Generate Drafts';
+      return;
+    }
+  } catch (err) {
+    stopProgress('prog2', 'stages2');
+    showErr('err2', 'err2-title', 'err2-body', 'Connection error', err.message + (err.message === 'Failed to fetch' ? ' — check CORS is enabled on the n8n webhook.' : ''));
+    btn.disabled = false; btn.textContent = 'Rank Prospects & Generate Drafts';
+    return;
+  }
+
+  // ── Step 2: Poll until success, error, or max attempts ────────────────
+  const pollUrl = N8N_BASE_URL + '/api/v1/executions/' + executionId + '?includeData=true';
+  const pollHeaders = { 'X-N8N-API-KEY': N8N_API_KEY };
+  let attempt = 0;
+
+  // Update poll counter in UI
+  const pollStatus = document.getElementById('poll-status');
+  if (pollStatus) pollStatus.style.display = '';
+
+  const poll = async () => {
+    attempt++;
+    if (pollStatus) pollStatus.textContent = 'Still processing… checked ' + attempt + ' of ' + POLL_MAX_ATTEMPTS + ' times (every 10s)';
+
+    if (attempt > POLL_MAX_ATTEMPTS) {
+      stopProgress('prog2', 'stages2');
+      if (pollStatus) pollStatus.style.display = 'none';
+      showErr('err2', 'err2-title', 'err2-body', 'Timed out', 'The workflow is taking longer than 15 minutes. Check n8n for execution #' + executionId + '.');
+      btn.disabled = false; btn.textContent = 'Rank Prospects & Generate Drafts';
+      return;
+    }
+
+    let exec;
+    try {
+      const res = await fetch(pollUrl, { headers: pollHeaders });
+      if (!res.ok) {
+        // API auth error or other — keep trying unless 401
+        if (res.status === 401) {
+          stopProgress('prog2', 'stages2');
+          if (pollStatus) pollStatus.style.display = 'none';
+          showErr('err2', 'err2-title', 'err2-body', 'API auth error (401)', 'Check your N8N_API_KEY in the HTML file.');
+          btn.disabled = false; btn.textContent = 'Rank Prospects & Generate Drafts';
+          return;
+        }
+        setTimeout(poll, POLL_INTERVAL_MS); return;
+      }
+      exec = await res.json();
+    } catch (err) {
+      // Network blip — keep polling
+      setTimeout(poll, POLL_INTERVAL_MS); return;
+    }
+
+    const status = exec.status;
+    const finished = exec.finished;
+    console.log('[poll] attempt', attempt, 'executionId', executionId, 'status:', status, 'finished:', finished);
+
+    // Still running — keep polling
+    if (!finished && (status === 'running' || status === 'waiting' || status === 'new' || status === 'initialized')) {
+      setTimeout(poll, POLL_INTERVAL_MS); return;
+    }
+
+    // If finished flag is true OR status is a terminal state — stop polling
+    const isSuccess = finished && (status === 'success' || status === 'succeeded' || !status);
+    const isError   = status === 'error' || status === 'crashed' || status === 'failed';
+    const isCanceled = status === 'canceled' || status === 'cancelled';
+
+    // If still not finished and not a known terminal state — keep polling
+    if (!finished && !isSuccess && !isError && !isCanceled) {
+      setTimeout(poll, POLL_INTERVAL_MS); return;
+    }
+
+    // Terminal — stop everything
+    stopProgress('prog2', 'stages2');
+    if (pollStatus) pollStatus.style.display = 'none';
+    btn.disabled = false; btn.textContent = 'Rank Prospects & Generate Drafts';
+
+    if (isError) {
+      showErr('err2', 'err2-title', 'err2-body', 'Workflow error', 'n8n execution #' + executionId + ' failed. Check the n8n execution log for details.');
+      return;
+    }
+    if (isCanceled) {
+      showErr('err2', 'err2-title', 'err2-body', 'Execution cancelled', 'n8n execution #' + executionId + ' was cancelled.');
+      return;
+    }
+    if (isSuccess) {
+      // Extract output from Aggregate Final Output node
+      try {
+        const runData = exec.data && exec.data.resultData && exec.data.resultData.runData;
+        if (!runData) throw new Error('no runData in execution response');
+
+        let raw = null;
+
+        // Try known node names first (exact match)
+        const candidateNodes = [
+          'Aggregate Final Output',
+          'Aggregate Final output',
+          'aggregate final output',
+          'Router',
+        ];
+        for (const nodeName of candidateNodes) {
+          if (runData[nodeName] && runData[nodeName][0]) {
+            try {
+              const item = runData[nodeName][0].data.main[0][0];
+              if (item && item.json) { raw = item.json; break; }
+            } catch(e) {}
+          }
+        }
+
+        // Fallback: scan ALL nodes for one with summary/ranking/approved_drafts
+        if (!raw) {
+          for (const nodeName of Object.keys(runData)) {
+            try {
+              const nodeRuns = runData[nodeName];
+              if (!nodeRuns || !nodeRuns[0]) continue;
+              const mainData = nodeRuns[0].data && nodeRuns[0].data.main;
+              if (!mainData || !mainData[0] || !mainData[0][0]) continue;
+              const item = mainData[0][0].json;
+              if (item && (item.summary || item.ranking || item.approved_drafts || item.all_scored)) {
+                raw = item; break;
+              }
+            } catch(e) {}
+          }
+        }
+
+        if (!raw) {
+          // Last resort: show available node names so we can debug
+          const nodeNames = Object.keys(runData).join(', ');
+          throw new Error('Could not find output. Available nodes: ' + nodeNames);
+        }
+
+        if (Array.isArray(raw)) raw = raw[0];
+        if (raw && raw.json) raw = raw.json;
+        renderW2(raw);
+      } catch (parseErr) {
+        showErr('err2', 'err2-title', 'err2-body', 'Could not parse results', parseErr.message + '. Execution #' + executionId + ' completed — check n8n for raw output.');
+      }
+      return;
+    }
+
+    // finished=true but unknown status — try to extract results anyway
+    showErr('err2', 'err2-title', 'err2-body', 'Unexpected status: ' + status, 'Execution #' + executionId + ' finished with an unknown status. Check n8n for details.');
+  };
+
+  // Start polling after a short delay (give n8n time to register the execution)
+  setTimeout(poll, 3000);
+});
+
+// ── W2 render ─────────────────────────────────────────────────────────────
+function renderW2(data) {
+  if (!data) { showErr('err2','err2-title','err2-body','Empty response','The backend returned no data.'); return; }
+  const summary  = data.summary || {};
+  const approved = data.approved_drafts || [];
+  const review   = data.human_review_drafts || [];
+  const failed   = data.failed_scrapes || [];
+  const allScored = data.all_scored || [];
+  const scoredMap = {};
+  allScored.forEach(s => { if (s.pid) scoredMap[s.pid] = s; });
+
+  document.getElementById('w2-stats').innerHTML = [
+    [summary.scored         || 0, 'scored'],
+    [summary.total_selected || 0, 'selected'],
+    [summary.drafts_approved|| 0, 'approved'],
+    [summary.drafts_review  || 0, 'in review'],
+    [summary.failed_scrapes || 0, 'failed'],
+  ].map(([v, l]) => `<div class="stat-item"><span class="stat-num">${v}</span><span class="stat-lbl">${l}</span></div>`).join('');
+
+  const approvedEl = document.getElementById('w2-approved');
+  document.getElementById('w2-approved-count').textContent = approved.length + ' draft' + (approved.length !== 1 ? 's' : '');
+  approvedEl.innerHTML = approved.length
+    ? approved.map(d => buildProspectCard(d, scoredMap, true)).join('')
+    : '<p style="font-size:.81rem;color:var(--text-3)">No approved drafts.</p>';
+
+  const reviewEl = document.getElementById('w2-review');
+  document.getElementById('w2-review-count').textContent = review.length + ' draft' + (review.length !== 1 ? 's' : '');
+  reviewEl.innerHTML = review.length
+    ? review.map(d => buildProspectCard(d, scoredMap, false)).join('')
+    : '<p style="font-size:.81rem;color:var(--text-3)">None.</p>';
+
+  const fw = document.getElementById('w2-failed-wrap');
+  if (failed.length) {
+    fw.style.display = '';
+    document.getElementById('w2-failed').innerHTML = failed.map(f =>
+      `<li>${esc(typeof f === 'string' ? f : (f.url || f.name || JSON.stringify(f)))}</li>`
+    ).join('');
+  } else {
+    fw.style.display = 'none';
+  }
+
+  document.getElementById('out2').classList.add('visible');
+  document.getElementById('out2').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ── Prospect card builder ─────────────────────────────────────────────────
+function buildProspectCard(draft, scoredMap, isApproved) {
+  const pid     = draft.pid || '';
+  const name    = draft.name || 'Unknown Prospect';
+  const rank    = draft.rank != null ? '#' + draft.rank : '';
+  const channel = (draft.channel || '').toLowerCase();
+  const msg     = draft.message || {};
+  const subject = (msg.subject || '').trim();
+  const body    = (msg.body    || '').trim();
+  const jscores = draft.judge_scores || {};
+  const router  = draft.router || {};
+  const flags   = router.reasons || [];
+
+  const scored   = scoredMap[pid] || {};
+  const sd       = scored.data || {};
+  const ss       = sd.subscores || {};
+  const band     = (sd.band || 'WEAK').toLowerCase();
+  const overall  = sd.overall_score != null ? sd.overall_score : (draft.overall_score || '—');
+  const decision     = sd.decision || '';
+  const relationship = sd.relationship_to_company || '';
+  const confidence   = sd.confidence || '';
+  const rationale    = sd.rationale  || '';
+  const angle        = sd.outreach_angle || '';
+  const framing      = sd.recommended_message_framing || '';
+  const hooks        = Array.isArray(sd.personalization_hooks) ? sd.personalization_hooks : [];
+  const dataGaps     = Array.isArray(sd.data_gaps)             ? sd.data_gaps             : [];
+  const redFlags     = Array.isArray(sd.red_flags)             ? sd.red_flags             : [];
+
+  const subScores = [
+    { label: 'Influence',  val: ss.influence_on_hire },
+    { label: 'Engagement', val: ss.engagement_likelihood },
+    { label: 'Function',   val: ss.function_relevance },
+    { label: 'Warmth',     val: ss.connection_warmth },
+    { label: 'Currency',   val: ss.company_currency },
+    { label: 'Email pri.', val: sd.email_priority_score },
+  ];
+
+  function barClass(v) {
+    const n = Number(v) || 0;
+    if (n >= 75) return 'bar-prime';
+    if (n >= 55) return 'bar-strong';
+    if (n >= 35) return 'bar-moderate';
+    return 'bar-weak';
+  }
+
+  const scoreClass = 'score-' + band;
+  const bandPill = `<span class="pill pill-${band}">${(sd.band || '—').toUpperCase()}</span>`;
+  const decisionPill = decision ? `<span class="pill pill-decision">${decision.replace(/_/g, ' ')}</span>` : '';
+  const relPill = relationship === 'INSIDER'
+    ? `<span class="pill pill-insider">INSIDER</span>`
+    : relationship === 'RETAINED_AGENCY'
+    ? `<span class="pill pill-agency">AGENCY</span>` : '';
+  const confPill = confidence ? `<span class="pill pill-conf">conf ${confidence}</span>` : '';
+
+  const subscoresHtml = subScores.map(s => {
+    const v = Number(s.val) || 0;
+    const pct = Math.min(100, Math.max(0, v));
+    return `<div class="subscore-row">
+      <span class="subscore-name">${esc(s.label)}</span>
+      <div class="subscore-bar-wrap"><div class="subscore-bar ${barClass(v)}" style="width:${pct}%"></div></div>
+      <span class="subscore-val">${v || '—'}</span>
+    </div>`;
+  }).join('');
+
+  const hooksHtml   = hooks.length    ? `<ul class="hooks-list">${hooks.map(h => `<li>${esc(h)}</li>`).join('')}</ul>` : '';
+  const gapsHtml    = dataGaps.length ? dataGaps.join(' · ') : '';
+  const redFlagsHtml = redFlags.length
+    ? `<div style="margin-top:.35rem">
+        <span style="font-size:.68rem;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:.06em;">Red Flags</span>
+        <p class="gaps-text" style="color:var(--red)">${esc(redFlags.join(' · '))}</p>
+       </div>` : '';
+
+  const judgeHtml = Object.entries(jscores)
+    .map(([k, v]) => `<span class="judge-chip">${k.replace(/_/g, ' ')}: ${v}</span>`).join('');
+
+  const draftId = 'draft-' + Math.random().toString(36).slice(2, 8);
+  const draftSection = body ? `
+    <div class="draft-section">
+      <div class="draft-hd">
+        <span class="draft-lbl">Draft Message</span>
+        <span class="channel-tag">${channel === 'email' ? '✉ Email' : '💬 LinkedIn'}</span>
+      </div>
+      <div id="${draftId}">
+        ${subject ? `<p class="draft-subject">Subject: ${esc(subject)}</p>` : ''}
+        <p class="draft-body">${esc(body)}</p>
+      </div>
+      <div style="display:flex;gap:.4rem;margin-top:.5rem;flex-wrap:wrap">
+        <button class="copy-btn" onclick="copyEl('${draftId}',this)">Copy</button>
+      </div>
+      ${judgeHtml ? `<div class="judge-grid">${judgeHtml}</div>` : ''}
+      ${!isApproved && flags.length ? `<p class="router-flags">Flagged: ${esc(flags.slice(0, 3).join(' · '))}</p>` : ''}
+    </div>` : '';
+
+  return `
+  <div class="pcard">
+    <div class="pcard-hd">
+      <div style="display:flex;align-items:flex-start;gap:.875rem">
+        <div style="text-align:center;min-width:48px">
+          <div class="pcard-rank">${esc(rank)}</div>
+          <div class="pcard-score ${scoreClass}">${overall}</div>
+          <div class="score-lbl">score</div>
+        </div>
+        <div>
+          <p class="pcard-name">${esc(name)}</p>
+          <div class="pcard-pills">${bandPill}${decisionPill}${relPill}${confPill}</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:.35rem;align-items:center">
+        <span class="badge ${isApproved ? 'badge-green' : 'badge-amber'}">${isApproved ? '✓ Approved' : '⚠ Review'}</span>
+      </div>
+    </div>
+    <div class="subscores">
+      <div class="subscore-grid">${subscoresHtml}</div>
+    </div>
+    <div class="pcard-body">
+      ${rationale ? `<p class="rationale">${esc(rationale)}</p>` : ''}
+      ${angle     ? `<div class="detail-row"><span class="detail-lbl">Angle</span><span class="detail-val">${esc(angle)}</span></div>` : ''}
+      ${framing   ? `<div class="detail-row"><span class="detail-lbl">Framing</span><span class="detail-val">${esc(framing)}</span></div>` : ''}
+      ${hooksHtml ? `<div class="detail-row"><span class="detail-lbl">Hooks</span><div>${hooksHtml}</div></div>` : ''}
+      ${gapsHtml  ? `<div class="detail-row" style="margin-top:.35rem"><span class="detail-lbl">Data gaps</span><p class="gaps-text">${esc(gapsHtml)}</p></div>` : ''}
+      ${redFlagsHtml}
+    </div>
+    ${draftSection}
+  </div>`;
+}
+
+}); // end DOMContentLoaded
+</script>
+</body>
+</html>
