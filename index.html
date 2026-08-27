@@ -511,7 +511,9 @@ const W2_URL = 'https://n8n-production-241f8.up.railway.app/webhook/outreach-tar
 
 // ── n8n Execution API (for async polling) ────────────────────────────────
 // Replace YOUR_N8N_API_KEY with your actual key from n8n → Settings → API
-const N8N_API_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5YWM4MWZmNi0wMGNiLTQ0NTctYjc1OC00ZTQwZTNjNTYyNmYiLCJpc3MiOiJuOG4iLCJhdWQiOiJwdWJsaWMtYXBpIiwianRpIjoiNDdlYjFkNTUtZWE0Ny00MGYwLTg3MDEtZThjZmY3NmIzNGQ4IiwiaWF0IjoxNzg3ODE4NTExLCJleHAiOjE3OTAzOTUyMDB9.996A7IpXvUbgOHffJ4V8-klISzlsWAkhi9LRQ-E1LRE';
+const N8N_API_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5YWM4MWZmNi0wMGNiLTQ0NTctYjc1OC00ZTQwZTNjNTYyNmYiLCJpc3MiOiJuOG4iLCJhdWQiOiJwdWJsaWMtYXBpIiwianRpIjoiNDdlYjFkNTUtZWE0Ny00MGYwLTg3MDEtZThjZmY3NmIzNGQ4IiwiaWF0IjoxNzg3ODE4NTExLCJleHAiOjE3OTAzOTUyMDB9.996A7IpXvUbgOHffJ4V8-klISzlsWAkhi9LRQ-E1LRE
+
+';
 const N8N_BASE_URL = 'https://n8n-production-241f8.up.railway.app';
 const POLL_INTERVAL_MS  = 10000;  // poll every 10 seconds
 const POLL_MAX_ATTEMPTS = 90;     // give up after 15 minutes (90 × 10s)
@@ -885,6 +887,8 @@ document.getElementById('form-w2').addEventListener('submit', async e => {
   }
 
   // ── Step 2: Poll until success, error, or max attempts ────────────────
+  // Uses the proxy webhook (/webhook/check-execution) instead of calling
+  // the n8n API directly — avoids CORS issues on /api/v1/ endpoints.
   const pollUrl = N8N_BASE_URL + '/webhook/check-execution?id=' + executionId;
   const pollHeaders = {};
   let attempt = 0;
@@ -909,24 +913,29 @@ document.getElementById('form-w2').addEventListener('submit', async e => {
     try {
       const res = await fetch(pollUrl, { headers: pollHeaders });
       if (!res.ok) {
-        // API auth error or other — keep trying unless 401
-        if (res.status === 401) {
-          stopProgress('prog2', 'stages2');
-          if (pollStatus) pollStatus.style.display = 'none';
-          showErr('err2', 'err2-title', 'err2-body', 'API auth error (401)', 'Check your N8N_API_KEY in the HTML file.');
-          btn.disabled = false; btn.textContent = 'Rank Prospects & Generate Drafts';
-          return;
-        }
         setTimeout(poll, POLL_INTERVAL_MS); return;
       }
-      exec = await res.json();
+      const raw = await res.json();
+      // The proxy webhook may wrap the execution in various shapes —
+      // unwrap until we find the object with status/finished fields.
+      if (raw && raw.status !== undefined) {
+        exec = raw;
+      } else if (raw && raw.body && raw.body.status !== undefined) {
+        exec = raw.body;
+      } else if (Array.isArray(raw) && raw[0]) {
+        exec = raw[0].json || raw[0];
+      } else if (raw && raw.json) {
+        exec = raw.json;
+      } else {
+        exec = raw;
+      }
     } catch (err) {
       // Network blip — keep polling
       setTimeout(poll, POLL_INTERVAL_MS); return;
     }
 
-    const status = exec.status;
-    const finished = exec.finished;
+    const status = exec ? exec.status : undefined;
+    const finished = exec ? exec.finished : undefined;
     console.log('[poll] attempt', attempt, 'executionId', executionId, 'status:', status, 'finished:', finished);
 
     // Still running — keep polling
